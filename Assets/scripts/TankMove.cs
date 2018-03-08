@@ -8,12 +8,16 @@ public class TankMove : MonoBehaviour {
 	public float mRotateSpeed=18;   //旋转速度18°
 	public int number=1;            //坦克编号  区分敌方和我方
 
+	public AudioClip idelClip;   //静止音效
+	public AudioClip drivClip;   //移动音效
+	AudioSource tankAudio;
 
 	Rigidbody mRi;
 
 	void Awake()
 	{
 		mRi = GetComponent < Rigidbody> ();
+		tankAudio = GetComponent<AudioSource> ();
 	}
 
 
@@ -24,5 +28,19 @@ public class TankMove : MonoBehaviour {
  	
 		float h=Input.GetAxis("HorizontalTank"+number);
 		mRi.angularVelocity=transform.up*h*mRotateSpeed;  //旋转
+
+		//abs绝对值
+		if (Mathf.Abs (v) > 0.1f || Mathf.Abs (h) > 0.1f) {
+			//移动中
+			tankAudio.clip = drivClip;
+			if(!tankAudio.isPlaying){
+				tankAudio.Play ();
+			}
+		} else {
+			tankAudio.clip = idelClip;
+			if(!tankAudio.isPlaying){
+				tankAudio.Play ();
+			}
+		}
 	}
 }
